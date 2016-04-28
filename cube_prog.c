@@ -1,3 +1,4 @@
+#include "cube_prog.h"
 #include "lcd.h"
 #include "ili934x.h"
 
@@ -5,47 +6,23 @@ void main(void) {
 	/* Initialise the LCD display driver */
 	init_lcd();
 
-	/* INITIAL TEST: RECTANGLE. */
-	/* Placeholder rectangles, for testing. Args: left, right, top, bottom. */
-	/*rectangle r1 = {0, 5, 0, 5};*/
-	rectangle r2 = {1, 5, 1, 5};
-
-	/* Drawing the rectangles. Args: Rectangle, colour. */
-	/*fill_rectangle(r1, BLACK);*/
-	fill_rectangle(r2, BLACK);
-/*	write_data16(CYAN);
-	write_data16(BLUE);
-	write_data16(PURPLE);
-	write_data16(RED);
-	write_data16(ORANGE);
-	write_data16(YELLOW);
-	write_data16(GREEN_YELLOW);
-	write_data16(LIME_GREEN);
-	write_data16(GREEN);
-	write_data16(TURQUOISE);*/
-	write_data16(CYAN);
-	write_data16(CYAN);
-	write_data16(CYAN);
-	write_data16(CYAN);
-	write_data16(CYAN);
-	write_data16(RED);
-	write_data16(RED);
-	write_data16(RED);
-	write_data16(RED);
-	write_data16(RED);
-	write_data16(GREEN);
-	write_data16(GREEN);
-	write_data16(GREEN);
-	write_data16(GREEN);
-	write_data16(GREEN);
-	write_data16(PURPLE);
-	write_data16(PURPLE);
-	write_data16(PURPLE);
-	write_data16(PURPLE);
-	write_data16(PURPLE);
-	write_data16(YELLOW);
-	write_data16(YELLOW);
-	write_data16(YELLOW);
-	write_data16(YELLOW);
-	write_data16(YELLOW);
+	draw_px(50, 50, RED);
+	/*draw_px(100, 100);*/
 }
+
+void draw_px(uint16_t x, uint16_t y, uint16_t col){
+	if(x <= display.width && y <= display.height) {
+		write_cmd(PAGE_ADDRESS_SET);
+		write_data16(y);
+		write_data16(y);
+		write_cmd(COLUMN_ADDRESS_SET);
+		write_data16(x);
+		write_data16(x);
+		write_cmd(MEMORY_WRITE);
+		write_data16(col);
+	}
+}
+
+/*void draw_px(uint16_t x, uint16_t y){
+	draw_px(x, y, WHITE);
+}*/
