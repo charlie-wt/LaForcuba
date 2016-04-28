@@ -1,0 +1,27 @@
+.NOTES.
+
+HOW PIXEL COLOURING WORKS:
+- From fill_rectangle, looks like a bunch of write_data16() commands.
+- Also have a bunch of write_cmd(); commands, which probably tell the display how to interpret all the data writes. eg. write_cmd(MEMORY_WRITE) meaning the ensuing write_data16(data) commands correspond to colouring pixels. Dunno though.
+- Writing a bunch of write_data(col); commands out of nowhere seems to colour pixels in a line, left to right, instead of on top of eachother as might have been thought.
+- Hard to tell, but it looks like if you create a rectangle and fill it black, then keep writing data one by one, the pixels fill up the previous rectangle again starting from the top left to bottom right. Interesting. Guess it's all about defining boundaries with write_cmd(), then using write_data16() afterwards. Doesn't explain all the weird stuff going on in the fill_rectangle function, and why the simply for loops are commented out.
+- Seems like use write_cmd(COLUMN_ADDRESS_SET); to put it in 'setting the columns to colour' mode, followed by write_data16(r.left); and write_data16(r.right); to actually set the left and right limit of which columns to colour.
+- Then use write_cmd(PAGE_ADDRESS_SET); in a similar way, writing the data r.top and r.bottom.
+- Then use write_cmd(MEMORY_WRITE); to start actually writing to the memory of the display, ie. the pixels.
+- Dunno what the rest of it is (apart from write_data16(col); commands), probably just stuff to make sure the rectangle's valid or something, idk.
+
+WHAT IT MEANS:
+r 	: Some general purpose register.
+i 	: An immediate integer operand (one with constant value).
+sts	: k, Rr : A basic store command, officically "Store direct into data space". 
+	: eg. 'sts $FF00, r26' gets the value stored in register 26, and stores it in address $FF00 in data space.
+k	: Constant address
+Rr 	: Source Register in the Register File
+
+write_data(data);
+	- asm volatile("sts %0,%1" :: "i", (DATA_ADDR), "r" (data) : "memory");
+	- Use the value of 'data' (data), stored in some general register ("r"), and store it ("sts ... ") in the data space address 'DATA_ADDR' (DATA_ADDR).
+
+write_data16(data);
+	- asm volatile("sts %0,%B1 \n\t sts %0,%A1" :: "i" (DATA_ADDR), "r" (data)  : "memory");
+	- Does the same as write_data(data); but splits into two store operations, for total of 16bit write.
