@@ -4,4 +4,3 @@
 
 void draw_px(uint16_t x, uint16_t y, uint16_t col);
 void draw_line(uint16_t x1, uint16_t x2, uint16_t y1, uint16_t y2, uint16_t col);
-void draw_horiz(uint16_t x1, uint16_t x2, uint16_t y, uint16_t col);
