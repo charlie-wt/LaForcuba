@@ -1,12 +1,10 @@
 #include "cube_prog.h"
 #include "lcd.h"
 #include "ili934x.h"
-#include "printf.h"
-#include <util/delay.h>
 #include <avr/interrupt.h>
 #include <stdlib.h>
 
-uint16_t t;
+uint16_t t;		/* Time. */
 
 void main(void) {
 	/* 8MHz clock, no prescaling. */
@@ -17,11 +15,12 @@ void main(void) {
 	init_lcd();
 	set_frame_rate_hz(61);
 
+	/* Enable external interrupts, for when pin 6 is changed. For non-flickering display. */
 	EIMSK |= _BV(INT6);
 
 	t = 0;
 
-	OCR1A = 65535;
+	/* Start animation loop, with interrupts to update time. */
 	sei();
 	while(1){
 		redraw();
@@ -30,16 +29,6 @@ void main(void) {
 }
 
 void redraw(){
-/*	cli();*/
-	/* Envelope pattern */
-	/*draw_line(0, display.width, 0, 0, RED);
-	draw_line(display.width, display.width, 0, display.height, ORANGE);
-	draw_line(display.width, 0, display.height, display.height, YELLOW);
-	draw_line(0, 0, display.height, 0, GREEN);
-	draw_line(0, display.width, 0, display.height, BLUE);
-	draw_line(0, display.width, display.height, 0, PURPLE);
-	printf("This is a test of printing.\n");
-	printf("My number is %d.\n", 61);*/
 
 	if(t<display.width+50){
 		draw_line(49+t, 74+t, 50, 74+t, display.background);
@@ -61,8 +50,8 @@ void draw_px(uint16_t x, uint16_t y, uint16_t col){
 }
 
 void draw_line(uint16_t x1, uint16_t x2, uint16_t y1, uint16_t y2, uint16_t col){
-	/* Uses Bresenham's Line Algorithm, with an implementation adapted from:
-		http://www.brackeen.com/vga/shapes.html */
+/* Uses Bresenham's Line Algorithm, with an implementation adapted from:
+   http://www.brackeen.com/vga/shapes.html */
 	uint16_t i, absDistX, absDistY, x, y, currX, currY;
 	int distX, distY, signDX, signDY;
 
