@@ -19,36 +19,14 @@ void main(void) {
 
 	EIMSK |= _BV(INT6);
 
-	/* Enable timer 1 interrupts, to update time. */
-/*	TCCR0A = _BV(WGM01);*/	/* Sets Timer to Waveform Generation Mode 2: Clear Timer on Compare Match. */
-/*	TCCR0B = _BV(CS01)*/		/* CS: Clock select. Selects the clock source to use. CS01 = CS00 = 1: clk / 64. */
-/*		  | _BV(CS00);*/		/* F_CPU / 64 */
-
-/*	OCR0A = (uint8_t)(F_CPU / (64.0 * 16000) - 0.5);*/		/* Set output compare register 0 to 16ms. */
-
-/*	TIMSK0 |= _BV(OCIE0A);*/								/* Enable interrupts for output compare register 0. */
-
-	TCCR1A = 0;
-	TCCR1B = _BV(WGM12);
-	TCCR1B |= _BV(CS10);
-	TIMSK1 |= _BV(OCIE1A);
-
 	t = 0;
-/*	sei();
+
+	OCR1A = 65535;
+	sei();
 	while(1){
 		redraw();
-		t++;
-		_delay_ms(16);
-	}*/
-	do{
-		OCR1A = 65535;
-		sei();
-		while(1){
-			redraw();
-		}
-		cli();
-		clear_screen();
-	}while(1);
+	}
+	cli();
 }
 
 void redraw(){
@@ -63,17 +41,10 @@ void redraw(){
 	printf("This is a test of printing.\n");
 	printf("My number is %d.\n", 61);*/
 
-/*	uint16_t t;
-
-	for(t=0;t<display.width+50;t++){*/
 	if(t<display.width+50){
-		/*clear_screen();*/
 		draw_line(49+t, 74+t, 50, 74+t, display.background);
 		draw_line(50+t, 75+t, 50, 75+t, CYAN);
 	}else{t = 0;}
-/*		_delay_ms(16);
-	}*/
-/*	sei();*/
 }
 
 void draw_px(uint16_t x, uint16_t y, uint16_t col){
@@ -131,17 +102,6 @@ void draw_line(uint16_t x1, uint16_t x2, uint16_t y1, uint16_t y2, uint16_t col)
 	}
 }
 
-ISR( TIMER0_COMPA_vect ){
-	cli();
-	t++;
-	redraw();
-	sei();
-}
-
 ISR( INT6_vect ){
 	t++;
-}
-
-ISR( TIMER1_COMPA_vect ){
-
 }
