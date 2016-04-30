@@ -5,8 +5,10 @@
 #include <avr/interrupt.h>
 #include <stdlib.h>
 
-uint16_t t;		/* Time. */
+uint16_t t;
+int16_t lcdw, lcdh;
 point p = {160, 120, 1, BLUE};
+point po = {0, 0, 1, RED};
 
 void main(void) {
 	/* 8MHz clock, no prescaling. */
@@ -17,12 +19,16 @@ void main(void) {
 	init_lcd();
 	set_frame_rate_hz(61);
 
+	lcdw = (int16_t) display.width;
+	lcdh = (int16_t) display.height;
+
 	/* Enable external interrupts, for when pin 6 is changed. For non-flickering display. */
 	EIMSK |= _BV(INT6);
 
+	/* Start time. */
 	t = 0;
 
-	/* Start animation loop, with interrupts to update time. */
+	/* Start loop, with interrupts to update time & animation. */
 	sei();
 	while(1){}
 	cli();
@@ -30,18 +36,30 @@ void main(void) {
 
 void redraw(){
 	if(t<display.width){
+		/* Clearing. */
 		clear_pt2D(&p);
-		transX(&p, 1);
-		transY(&p, 1);
+/*		clear_pt2D(&po);
+		draw_px(lcdw, lcdh, display.background);*/
+
+		/* Transforming. */
+/*		transX(&p, 1);*/
+/*		transY(&p, 1);*/
+		rotX(&p, 1);
+		
+		/* Redrawing. */
 		draw_pt2D(&p);
+/*		draw_pt2D(&po);
+		draw_px(lcdw, lcdh, GREEN);*/
 	}else{t = 0;}
 }
 
-void draw_px(uint16_t x, uint16_t y, uint16_t col){
-	if(x <= display.width && y <= display.height){
+void draw_px(int16_t x, int16_t y, uint16_t col){
+	int16_t fy = lcdh - y;
+
+	if(x >= 0 && x <= lcdw && fy >= 0 && fy <= lcdh){
 		write_cmd(PAGE_ADDRESS_SET);		/* Setting maximum & minimum y coordinate to draw. */
-		write_data16(y);
-		write_data16(y);
+		write_data16(fy);
+		write_data16(fy);
 		write_cmd(COLUMN_ADDRESS_SET);		/* Setting maximum & minimum x coordinate to draw. */
 		write_data16(x);
 		write_data16(x);
@@ -50,15 +68,20 @@ void draw_px(uint16_t x, uint16_t y, uint16_t col){
 	}
 }
 
-void draw_line(uint16_t x1, uint16_t x2, uint16_t y1, uint16_t y2, uint16_t col){
+void draw_line(int16_t x1, int16_t x2, int16_t y1, int16_t y2, uint16_t col){
 /* Uses Bresenham's Line Algorithm, with an implementation adapted from:
    http://www.brackeen.com/vga/shapes.html */
-	uint16_t i, absDistX, absDistY, x, y, currX, currY;
-	int distX, distY, signDX, signDY;
+	int16_t fy1 = lcdh - y1;
+	int16_t fy2 = lcdh - y2;
 
-	if((x1 > display.width && x2 > display.width) || (y1 > display.height && y2 > display.height)){}else{
+	if( (x1 < 0 && x2 < 0) || (fy1 < 0 && fy2 < 0) || 
+		(x1 > lcdw && x2 > lcdw) || (fy1 > lcdh && fy2 > lcdh)){}else{
+		
+		uint16_t i, absDistX, absDistY, x, y, currX, currY;
+		int16_t distX, distY, signDX, signDY;
+
 		distX = x2 - x1;				/* x axis distance */
-		distY = y2 - y1;				/* y axis distance */
+		distY = fy2 - fy1;				/* y axis distance */
 		absDistX = abs(distX);			/* Absolute x axis distance */
 		absDistY = abs(distY);			/* Absolute y axis distance */
 		signDX = sgn(distX);			/* Sign of x axis distance (going left or right) */
@@ -66,7 +89,7 @@ void draw_line(uint16_t x1, uint16_t x2, uint16_t y1, uint16_t y2, uint16_t col)
 		x = absDistY>>1;				/* y distance / 2 */
 		y = absDistX>>1;				/* x distance / 2 */
 		currX = x1;						/* Current x coordinate, to be drawn. */
-		currY = y1;						/* Current y coordinate, to be drawn. */
+		currY = fy1;					/* Current y coordinate, to be drawn. */
 
 		if(absDistX >= absDistY){		/* If line is more horizontal than vertical */
 			for(i=0;i<absDistX;i++){

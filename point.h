@@ -3,12 +3,9 @@
 #define PI 3.14159265
 
 typedef struct point {
-	uint16_t x, y, z, col;
+	int16_t x, y, z;
+	uint16_t col;
 } point;
-
-/*typedef struct point2D {
-	uint16_t x, y, col;
-} point2D;*/
 
 void transX(struct point *p, int16_t dist);
 void transY(struct point *p, int16_t dist);
