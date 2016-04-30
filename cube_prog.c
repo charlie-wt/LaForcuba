@@ -1,16 +1,79 @@
 #include "cube_prog.h"
 #include "lcd.h"
 #include "ili934x.h"
+#include "printf.h"
+#include <util/delay.h>
+#include <avr/interrupt.h>
 #include <stdlib.h>
 
+uint16_t t;
+
 void main(void) {
+	/* 8MHz clock, no prescaling. */
+	CLKPR = (1 << CLKPCE);
+	CLKPR = 0;
+
 	/* Initialise the LCD display driver */
 	init_lcd();
+	set_frame_rate_hz(61);
 
-	draw_px(50, 50, RED);
-	draw_line(100, 150, 75, 75, YELLOW);
-	draw_line(100, 150, 100, 125, PURPLE);
-	draw_line(150, 100, 150, 125, ORANGE);
+	EIMSK |= _BV(INT6);
+
+	/* Enable timer 1 interrupts, to update time. */
+/*	TCCR0A = _BV(WGM01);*/	/* Sets Timer to Waveform Generation Mode 2: Clear Timer on Compare Match. */
+/*	TCCR0B = _BV(CS01)*/		/* CS: Clock select. Selects the clock source to use. CS01 = CS00 = 1: clk / 64. */
+/*		  | _BV(CS00);*/		/* F_CPU / 64 */
+
+/*	OCR0A = (uint8_t)(F_CPU / (64.0 * 16000) - 0.5);*/		/* Set output compare register 0 to 16ms. */
+
+/*	TIMSK0 |= _BV(OCIE0A);*/								/* Enable interrupts for output compare register 0. */
+
+	TCCR1A = 0;
+	TCCR1B = _BV(WGM12);
+	TCCR1B |= _BV(CS10);
+	TIMSK1 |= _BV(OCIE1A);
+
+	t = 0;
+/*	sei();
+	while(1){
+		redraw();
+		t++;
+		_delay_ms(16);
+	}*/
+	do{
+		OCR1A = 65535;
+		sei();
+		while(1){
+			redraw();
+		}
+		cli();
+		clear_screen();
+	}while(1);
+}
+
+void redraw(){
+/*	cli();*/
+	/* Envelope pattern */
+	/*draw_line(0, display.width, 0, 0, RED);
+	draw_line(display.width, display.width, 0, display.height, ORANGE);
+	draw_line(display.width, 0, display.height, display.height, YELLOW);
+	draw_line(0, 0, display.height, 0, GREEN);
+	draw_line(0, display.width, 0, display.height, BLUE);
+	draw_line(0, display.width, display.height, 0, PURPLE);
+	printf("This is a test of printing.\n");
+	printf("My number is %d.\n", 61);*/
+
+/*	uint16_t t;
+
+	for(t=0;t<display.width+50;t++){*/
+	if(t<display.width+50){
+		/*clear_screen();*/
+		draw_line(49+t, 74+t, 50, 74+t, display.background);
+		draw_line(50+t, 75+t, 50, 75+t, CYAN);
+	}else{t = 0;}
+/*		_delay_ms(16);
+	}*/
+/*	sei();*/
 }
 
 void draw_px(uint16_t x, uint16_t y, uint16_t col){
@@ -27,10 +90,12 @@ void draw_px(uint16_t x, uint16_t y, uint16_t col){
 }
 
 void draw_line(uint16_t x1, uint16_t x2, uint16_t y1, uint16_t y2, uint16_t col){
+	/* Uses Bresenham's Line Algorithm, with an implementation adapted from:
+		http://www.brackeen.com/vga/shapes.html */
 	uint16_t i, absDistX, absDistY, x, y, currX, currY;
 	int distX, distY, signDX, signDY;
 
-	if(x1 <= display.width && x2 <= display.width && y1 <= display.height && y2 <= display.height){
+	if((x1 > display.width && x2 > display.width) || (y1 > display.height && y2 > display.height)){}else{
 		distX = x2 - x1;				/* x axis distance */
 		distY = y2 - y1;				/* y axis distance */
 		absDistX = abs(distX);			/* Absolute x axis distance */
@@ -64,4 +129,19 @@ void draw_line(uint16_t x1, uint16_t x2, uint16_t y1, uint16_t y2, uint16_t col)
 			}
 		}
 	}
+}
+
+ISR( TIMER0_COMPA_vect ){
+	cli();
+	t++;
+	redraw();
+	sei();
+}
+
+ISR( INT6_vect ){
+	t++;
+}
+
+ISR( TIMER1_COMPA_vect ){
+
 }

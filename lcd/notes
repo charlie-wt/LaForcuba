@@ -1,5 +1,7 @@
 .NOTES.
 
+- Could do frame refresh with timer + interrupt.
+
 HOW TO DRAW LINE:
 - 
 
