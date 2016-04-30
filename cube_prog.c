@@ -30,8 +30,10 @@ void main(void) {
 
 void redraw(){
 	if(t<display.width){
-		transXdraw(&p, 1);
-		transYdraw(&p, 1);
+		clear_pt2D(&p);
+		transX(&p, 1);
+		transY(&p, 1);
+		draw_pt2D(&p);
 	}else{t = 0;}
 }
 

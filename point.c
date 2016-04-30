@@ -50,12 +50,12 @@ void rotZ(struct point *p, int16_t angle) {
 	p->y = y;
 }
 
-void project(struct point *p, uint16_t win_width, uint16_t win_height, uint16_t fov, uint16_t viewer_dist){
+void project(struct point *p, uint16_t fov, uint16_t viewer_dist){
 	float factor = fov / (viewer_dist + p->z);
-	uint16_t x = p->x * factor + win_width / 2;
-	uint16_t y = -p->y * factor + win_height / 2;
+	uint16_t x = p->x * factor + display.width / 2;
+	uint16_t y = -p->y * factor + display.height / 2;
 	point proj = {x, y, 1, p->col};
-	/* Return it, draw it, idk */
+	/* TODO: Return it, draw it, idk */
 }
 
 void draw_pt2D(struct point *p){
@@ -64,22 +64,4 @@ void draw_pt2D(struct point *p){
 
 void clear_pt2D(struct point *p){
 	draw_px(p->x, p->y, display.background);
-}
-
-void transXdraw(struct point *p, int16_t dist){
-	clear_pt2D(p);
-	transX(p, dist);
-	draw_pt2D(p);
-}
-
-void transYdraw(struct point *p, int16_t dist){
-	clear_pt2D(p);
-	transY(p, dist);
-	draw_pt2D(p);
-}
-
-void transZdraw(struct point *p, int16_t dist){
-	clear_pt2D(p);
-	transZ(p, dist);
-	draw_pt2D(p);
 }
