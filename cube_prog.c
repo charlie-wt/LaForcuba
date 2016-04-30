@@ -7,8 +7,6 @@
 
 uint16_t t;		/* Time. */
 point p = {160, 120, 1, BLUE};
-/*line2D l = {100, 200, 100, 200, YELLOW};
-point_mov pm = {30, 30, 1, 0, GREEN};*/
 
 void main(void) {
 	/* 8MHz clock, no prescaling. */
@@ -26,32 +24,14 @@ void main(void) {
 
 	/* Start animation loop, with interrupts to update time. */
 	sei();
-	while(1){
-/*		redraw();*/
-	}
+	while(1){}
 	cli();
 }
 
-/*void animate_pt(point_mov *p){
-	draw_px(p->x, p->y, display.background);
-	p->x += p->movx;
-	p->y += p->movy;
-}*/
-
 void redraw(){
 	if(t<display.width){
-/*		draw_line(49+t, 74+t, 50, 74+t, display.background);
-		draw_line(50+t, 75+t, 50, 75+t, CYAN);
-		draw_px(34+t, 35, display.background);
-		draw_px(35+t, 35, LIME_GREEN);*/
-		
 		transXdraw(&p, 1);
 		transYdraw(&p, 1);
-
-/*		draw_pt2D(&p);*/
-/*		draw_pointmov(pm);
-		draw_point(p);
-		draw_line2D(l);*/
 	}else{t = 0;}
 }
 
@@ -110,27 +90,7 @@ void draw_line(uint16_t x1, uint16_t x2, uint16_t y1, uint16_t y2, uint16_t col)
 	}
 }
 
-/*void draw_point(point p){
-	draw_px(p.x, p.y, p.col);
-}
-
-void draw_pointmov(point_mov p){
-	draw_px(p.x, p.y, p.col);
-}
-
-void draw_line2D(line2D l){
-	draw_line(l.x1, l.x2, l.y1, l.y2, l.col);
-}
-
-void draw_line3D(line3D l){
-	
-}*/
-
 ISR( INT6_vect ){
 	t++;
 	redraw();
-/*	clear_pt2D(&p);*/
-/*	transXdraw(&p, 1);
-	transYdraw(&p, 1);*/
-/*	animate_pt(&pm);*/
 }
