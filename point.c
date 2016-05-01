@@ -3,7 +3,6 @@
 #include "cube_prog.h"
 
 /* Rotation and projection based off maths from: http://codentronix.com/2011/04/20/simulation-of-3d-point-rotation-with-python-and-pygame/ */
-/* WARNING: LCD driver uses y = 0 at the top, this maths uses y = 0 at the bottom. Should fix this. */
 
 void transX(struct point *p, int16_t dist){
 	int16_t x = p->x + dist;
@@ -50,12 +49,24 @@ void rotZ(struct point *p, int16_t angle) {
 	p->y = y;
 }
 
-void project(struct point *p, uint16_t fov, uint16_t viewer_dist){
+void updX(struct point *p, int16_t x){
+	p->x = x;
+}
+
+void updY(struct point *p, int16_t y){
+	p->y = y;
+}
+
+void updZ(struct point *p, int16_t z){
+	p->z = z;
+}
+
+struct point project(struct point *p, uint16_t fov, uint16_t viewer_dist){
 	float factor = fov / (viewer_dist + p->z);
 	int16_t x = p->x * factor + display.width / 2;
-	int16_t y = -p->y * factor + display.height / 2;
+	int16_t y = -1 * p->y * factor + display.height / 2;
 	point proj = {x, y, 1, p->col};
-	/* TODO: Return it, draw it, idk */
+	return proj;
 }
 
 void draw_pt2D(struct point *p){
