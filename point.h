@@ -19,3 +19,5 @@ void updZ(struct point *p, float z);
 struct point project(struct point *p, uint16_t fov, uint16_t viewer_dist);
 void draw_pt2D(struct point *p);
 void clear_pt2D(struct point *p);
+void draw_line2D(struct point *p1, struct point *p2);
+void clear_line2D(struct point *p1, struct point *p2);

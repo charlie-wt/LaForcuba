@@ -76,3 +76,11 @@ void draw_pt2D(struct point *p){
 void clear_pt2D(struct point *p){
 	draw_px((int16_t) p->x, (int16_t) p->y, display.background);
 }
+
+void draw_line2D(struct point *p1, struct point *p2){
+	draw_line(p1->x, p2->x, p1->y, p2->y, p1->col);
+}
+
+void clear_line2D(struct point *p1, struct point *p2){
+	draw_line(p1->x, p2->x, p1->y, p2->y, display.background);
+}
