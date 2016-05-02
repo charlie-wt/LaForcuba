@@ -8,14 +8,14 @@
 
 uint16_t t;
 int16_t lcdw, lcdh;
-point p = {-25, -25, -25, WHITE};
-point q = {-25, 25, -25, WHITE};
-point r = {25, -25, -25, WHITE};
-point s = {25, 25, -25, WHITE};
-/*point a = {-25, -25, 25, WHITE};
-point b = {-25, 25, 25, WHITE};
-point c = {25, -25, 25, WHITE};
-point d = {25, 25, 25, WHITE};*/
+point p = {-50, -50, -50, WHITE};
+point q = {-50, 50, -50, WHITE};
+point r = {50, 50, -50, WHITE};
+point s = {50, -50, -50, WHITE};
+point a = {-50, -50, 50, WHITE};
+point b = {-50, 50, 50, WHITE};
+point c = {50, 50, 50, WHITE};
+point d = {50, -50, 50, WHITE};
 
 void main(void) {
 	/* 8MHz clock, no prescaling. */
@@ -31,74 +31,84 @@ void main(void) {
 	lcdh = (int16_t) display.height;
 
 	/* Enable external interrupts, for when pin 6 is changed (in accordance w/ framerate). For non-flickering display. */
-	EIMSK |= _BV(INT6);
+/*	EIMSK |= _BV(INT6);*/
 
 	/* Start time. */
 	t = 0;
 
 	/* Start loop, with interrupts to update time & animation. */
 	sei();
-	while(1){}
+	while(1){redraw();}
 	cli();
 }
 
 void redraw(){
 	if(t<display.width){
+/* TODO: Make version with pixel buffer or something. */
 		/* Clearing. */
 /*		clear_pt2D(&p);
 		clear_pt2D(&q);
 		clear_pt2D(&r);
-		clear_pt2D(&s);*/
-/*		clear_pt2D(&a);
+		clear_pt2D(&s);
+		clear_pt2D(&a);
 		clear_pt2D(&b);
 		clear_pt2D(&c);
 		clear_pt2D(&d);*/
-		clear_line2D(&p, &q);
-		clear_line2D(&q, &s);
-		clear_line2D(&s, &r);
-		clear_line2D(&r, &p);
+/*		clear_line2D(&p, &q);
+		clear_line2D(&q, &r);
+		clear_line2D(&r, &s);
+		clear_line2D(&s, &p);*/
+		clear_screen();
 
 		/* Transforming. */
 		rotX(&p, 1);
 		rotX(&q, 1);
 		rotX(&r, 1);
 		rotX(&s, 1);
-/*		rotX(&a, 1);
+		rotX(&a, 1);
 		rotX(&b, 1);
 		rotX(&c, 1);
-		rotX(&d, 1);*/
+		rotX(&d, 1);
 
 		rotY(&p, 1);
 		rotY(&q, 1);
 		rotY(&r, 1);
 		rotY(&s, 1);
-/*		rotY(&a, 1);
+		rotY(&a, 1);
 		rotY(&b, 1);
 		rotY(&c, 1);
-		rotY(&d, 1);*/
+		rotY(&d, 1);
 
 		rotZ(&p, 1);
 		rotZ(&q, 1);
 		rotZ(&r, 1);
 		rotZ(&s, 1);
-/*		rotZ(&a, 1);
+		rotZ(&a, 1);
 		rotZ(&b, 1);
 		rotZ(&c, 1);
-		rotZ(&d, 1);*/
+		rotZ(&d, 1);
 
 		/* Redrawing. */
 /*		draw_pt2D(&p);
 		draw_pt2D(&q);
 		draw_pt2D(&r);
-		draw_pt2D(&s);*/
-/*		draw_pt2D(&a);
+		draw_pt2D(&s);
+		draw_pt2D(&a);
 		draw_pt2D(&b);
 		draw_pt2D(&c);
 		draw_pt2D(&d);*/
 		draw_line2D(&p, &q);
-		draw_line2D(&q, &s);
-		draw_line2D(&s, &r);
-		draw_line2D(&r, &p);
+		draw_line2D(&q, &r);
+		draw_line2D(&r, &s);
+		draw_line2D(&s, &p);
+		draw_line2D(&a, &b);
+		draw_line2D(&b, &c);
+		draw_line2D(&c, &d);
+		draw_line2D(&d, &a);
+		draw_line2D(&a, &p);
+		draw_line2D(&b, &q);
+		draw_line2D(&c, &r);
+		draw_line2D(&d, &s);
 	}else{t = 0;}
 }
 
