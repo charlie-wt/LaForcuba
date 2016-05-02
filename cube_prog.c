@@ -8,12 +8,7 @@
 
 uint16_t t;
 int16_t lcdw, lcdh;
-point p = {160, 120, 1, BLUE};
-point q = {160, 160, 1, GREEN};
-/*point q = {140, 120, 1, ORANGE};
-point r = {180, 120, 1, ORANGE};
-point s = {160, 100, 1, ORANGE};
-point u = {160, 140, 1, ORANGE};*/
+point p = {50, 50, 1, BLUE};
 
 void main(void) {
 	/* 8MHz clock, no prescaling. */
@@ -44,46 +39,26 @@ void redraw(){
 	if(t<display.width){
 		/* Clearing. */
 		clear_pt2D(&p);
-		clear_pt2D(&q);
-/*		clear_pt2D(&q);
-		clear_pt2D(&r);
-		clear_pt2D(&s);
-		clear_pt2D(&u);*/
 
 		/* Transforming. */
-		updX(&q, 160+30*sin(t));
 		rotZ(&p, 1);
-/*		rotZ(&q, 1);
-		rotZ(&r, 1);
-		rotZ(&s, 1);
-		rotZ(&u, 1);*/
-		point pp = project(&p, 128, 127);				/* Shows weird spiral for dist < fov, dot in centre if >= fov */
-/*		point qp = project(&q);
-		point rp = project(&r);
-		point sp = project(&s);
-		point up = project(&u);*/
 
 		/* Redrawing. */
 		draw_pt2D(&p);
-		draw_pt2D(&q);
-		draw_pt2D(&pp);
-/*		draw_pt2D(&qp);
-		draw_pt2D(&rp);
-		draw_pt2D(&sp);
-		draw_pt2D(&up);*/
 	}else{t = 0;}
 }
 
 void draw_px(int16_t x, int16_t y, uint16_t col){
-	int16_t fy = lcdh - y;					/* Flip y value, since maths uses y=0 at bottom but lcd uses y=0 at top. */
+	int16_t fx = x + 160;
+	int16_t fy = (lcdh - (y + 120));			/* Flip y value, since maths uses y=0 at bottom but lcd uses y=0 at top. */
 
-	if(x >= 0 && x <= lcdw && fy >= 0 && fy <= lcdh){
+	if(fx >= 0 && fx <= lcdw && fy >= 0 && fy <= lcdh){
 		write_cmd(PAGE_ADDRESS_SET);		/* Setting maximum & minimum y coordinate to draw. */
 		write_data16(fy);
 		write_data16(fy);
 		write_cmd(COLUMN_ADDRESS_SET);		/* Setting maximum & minimum x coordinate to draw. */
-		write_data16(x);
-		write_data16(x);
+		write_data16(fx);
+		write_data16(fx);
 		write_cmd(MEMORY_WRITE);			/* Setting to write memory; ie. to colour the pixel. */
 		write_data16(col);
 	}
