@@ -4,17 +4,17 @@
 
 /* Rotation and projection based off implementations from: http://codentronix.com/2011/04/20/simulation-of-3d-point-rotation-with-python-and-pygame/ */
 
-void transX(struct point *p, int16_t dist){
+void transX(struct point *p, float dist){
 	float nx = p->x + dist;
 	p->x = nx;
 }
 
-void transY(struct point *p, int16_t dist){
+void transY(struct point *p, float dist){
 	float ny = p->y + dist;
 	p->y = ny;
 }
 
-void transZ(struct point *p, int16_t dist){
+void transZ(struct point *p, float dist){
 	float nz = p->z + dist;
 	p->z = nz;
 }
@@ -96,9 +96,9 @@ void clear_line2D(struct point *p1, struct point *p2){
 }
 
 void clear_pt2D_p(struct point *p){
-	draw_px((int16_t) p->xp, (int16_t) p->yp, display.background);
+	draw_px(p->xp, p->yp, display.background);
 }
 
 void clear_line2D_p(struct point *p1, struct point *p2){
-	draw_line((int16_t) p1->xp, (int16_t) p2->xp, (int16_t) p1->yp, (int16_t) p2->yp, display.background);
+	draw_line(p1->xp, p2->xp, p1->yp, p2->yp, display.background);
 }

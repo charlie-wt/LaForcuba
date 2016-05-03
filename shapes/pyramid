@@ -1,0 +1,43 @@
+point a = {-50, -50, -50,    -50, -50, -50,    YELLOW};
+point b = {-50, -50, 50,    -50, -50, 50,    YELLOW};
+point c = {50, -50, 50,    50, -50, 50,    YELLOW};
+point d = {50, -50, -50,    50, -50, -50,    YELLOW};
+point e = {0, 50, 0,    0, 50, 0,    YELLOW};
+
+redraw(){
+		rotX(&a, 1);
+		rotX(&b, 1);
+		rotX(&c, 1);
+		rotX(&d, 1);
+		rotX(&e, 1);
+
+		rotY(&a, 1);
+		rotY(&b, 1);
+		rotY(&c, 1);
+		rotY(&d, 1);
+		rotY(&e, 1);
+
+		rotZ(&a, 1);
+		rotZ(&b, 1);
+		rotZ(&c, 1);
+		rotZ(&d, 1);
+		rotZ(&e, 1);
+
+		clear_line2D_p(&a, &b);
+		clear_line2D_p(&b, &c);
+		clear_line2D_p(&c, &d);
+		clear_line2D_p(&d, &a);
+		clear_line2D_p(&a, &e);
+		clear_line2D_p(&b, &e);
+		clear_line2D_p(&c, &e);
+		clear_line2D_p(&d, &e);
+
+		draw_line2D(&b, &c);
+		draw_line2D(&c, &d);
+		draw_line2D(&d, &a);
+		draw_line2D(&a, &b);
+		draw_line2D(&a, &e);
+		draw_line2D(&b, &e);
+		draw_line2D(&c, &e);
+		draw_line2D(&d, &e);
+}

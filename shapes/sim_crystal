@@ -1,0 +1,48 @@
+point a = {-50, 0, -50,    -50, 0, -50,    LIME_GREEN};
+point b = {-50, 0, 50,    -50, 0, 50,    LIME_GREEN};
+point c = {50, 0, 50,    50, 0, 50,    LIME_GREEN};
+point d = {50, 0, -50,    50, 0, -50,    LIME_GREEN};
+point e = {0, 100, 0,    0, 100, 0,    LIME_GREEN};
+point f = {0, -100, 0,    0, -100, 0,    LIME_GREEN};
+
+redraw(){
+		rotY(&a, 1);
+		rotY(&b, 1);
+		rotY(&c, 1);
+		rotY(&d, 1);
+		rotY(&e, 1);
+		rotY(&f, 1);
+
+		transY(&a, sin(t/5));
+		transY(&b, sin(t/5));
+		transY(&c, sin(t/5));
+		transY(&d, sin(t/5));
+		transY(&e, sin(t/5));
+		transY(&f, sin(t/5));
+
+		clear_line2D_p(&a, &b);
+		clear_line2D_p(&b, &c);
+		clear_line2D_p(&c, &d);
+		clear_line2D_p(&d, &a);
+		clear_line2D_p(&a, &e);
+		clear_line2D_p(&b, &e);
+		clear_line2D_p(&c, &e);
+		clear_line2D_p(&d, &e);
+		clear_line2D_p(&a, &f);
+		clear_line2D_p(&b, &f);
+		clear_line2D_p(&c, &f);
+		clear_line2D_p(&d, &f);
+
+		draw_line2D(&b, &c);
+		draw_line2D(&c, &d);
+		draw_line2D(&d, &a);
+		draw_line2D(&a, &b);
+		draw_line2D(&a, &e);
+		draw_line2D(&b, &e);
+		draw_line2D(&c, &e);
+		draw_line2D(&d, &e);
+		draw_line2D(&a, &f);
+		draw_line2D(&b, &f);
+		draw_line2D(&c, &f);
+		draw_line2D(&d, &f);
+}

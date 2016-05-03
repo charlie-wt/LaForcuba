@@ -1,0 +1,66 @@
+point p = {-50, -50, -50, -50, -50, -50, WHITE};
+point q = {-50, 50, -50, -50, 50, -50, WHITE};
+point r = {50, 50, -50, 50, 50, -50, WHITE};
+point s = {50, -50, -50, 50, -50, -50, WHITE};
+point a = {-50, -50, 50, -50, -50, 50, WHITE};
+point b = {-50, 50, 50, -50, 50, 50, WHITE};
+point c = {50, 50, 50, 50, 50, 50, WHITE};
+point d = {50, -50, 50, 50, -50, 50, WHITE};
+
+redraw(){
+		/* Transforming. */
+		rotX(&p, 1);
+		rotX(&q, 1);
+		rotX(&r, 1);
+		rotX(&s, 1);
+		rotX(&a, 1);
+		rotX(&b, 1);
+		rotX(&c, 1);
+		rotX(&d, 1);
+
+		rotY(&p, 1);
+		rotY(&q, 1);
+		rotY(&r, 1);
+		rotY(&s, 1);
+		rotY(&a, 1);
+		rotY(&b, 1);
+		rotY(&c, 1);
+		rotY(&d, 1);
+
+		rotZ(&p, 1);
+		rotZ(&q, 1);
+		rotZ(&r, 1);
+		rotZ(&s, 1);
+		rotZ(&a, 1);
+		rotZ(&b, 1);
+		rotZ(&c, 1);
+		rotZ(&d, 1);
+
+		/* Clearing. */
+		clear_line2D_p(&p, &q);
+		clear_line2D_p(&q, &r);
+		clear_line2D_p(&r, &s);
+		clear_line2D_p(&s, &p);
+		clear_line2D_p(&a, &b);
+		clear_line2D_p(&b, &c);
+		clear_line2D_p(&c, &d);
+		clear_line2D_p(&d, &a);
+		clear_line2D_p(&a, &p);
+		clear_line2D_p(&b, &q);
+		clear_line2D_p(&c, &r);
+		clear_line2D_p(&d, &s);
+
+		/* Redrawing. */
+		draw_line2D(&p, &q);
+		draw_line2D(&q, &r);
+		draw_line2D(&r, &s);
+		draw_line2D(&s, &p);
+		draw_line2D(&b, &c);
+		draw_line2D(&c, &d);
+		draw_line2D(&d, &a);
+		draw_line2D(&a, &b);
+		draw_line2D(&a, &p);
+		draw_line2D(&b, &q);
+		draw_line2D(&c, &r);
+		draw_line2D(&d, &s);
+}

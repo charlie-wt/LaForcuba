@@ -4,7 +4,6 @@
 #include "point.h"
 #include <math.h>
 #include <avr/interrupt.h>
-#include <util/delay.h>
 #include <stdlib.h>
 
 uint16_t t;
@@ -74,14 +73,6 @@ void redraw(){
 		rotZ(&d, 1);
 
 		/* Clearing. */
-/*		clear_pt2D_p(&p);
-		clear_pt2D_p(&q);
-		clear_pt2D_p(&r);
-		clear_pt2D_p(&s);
-		clear_pt2D_p(&a);
-		clear_pt2D_p(&b);
-		clear_pt2D_p(&c);
-		clear_pt2D_p(&d);*/
 		clear_line2D_p(&p, &q);
 		clear_line2D_p(&q, &r);
 		clear_line2D_p(&r, &s);
@@ -96,22 +87,14 @@ void redraw(){
 		clear_line2D_p(&d, &s);
 
 		/* Redrawing. */
-/*		draw_pt2D(&p);
-		draw_pt2D(&q);
-		draw_pt2D(&r);
-		draw_pt2D(&s);
-		draw_pt2D(&a);
-		draw_pt2D(&b);
-		draw_pt2D(&c);
-		draw_pt2D(&d);*/
 		draw_line2D(&p, &q);
 		draw_line2D(&q, &r);
 		draw_line2D(&r, &s);
 		draw_line2D(&s, &p);
-		draw_line2D(&a, &b);
 		draw_line2D(&b, &c);
 		draw_line2D(&c, &d);
 		draw_line2D(&d, &a);
+		draw_line2D(&a, &b);
 		draw_line2D(&a, &p);
 		draw_line2D(&b, &q);
 		draw_line2D(&c, &r);
