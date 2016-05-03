@@ -1,2 +1,2 @@
 # LaForcuba
-Drawing a cube on the LaFortuna board!
+Drawing a 3D shapes on the LaFortuna board!
