@@ -4,6 +4,7 @@
 
 typedef struct point {
 	float x, y, z;
+	float xp, yp, zp;
 	uint16_t col;
 } point;
 
@@ -21,3 +22,5 @@ void draw_pt2D(struct point *p);
 void clear_pt2D(struct point *p);
 void draw_line2D(struct point *p1, struct point *p2);
 void clear_line2D(struct point *p1, struct point *p2);
+void clear_pt2D_p(struct point *p);
+void clear_line2D_p(struct point *p1, struct point *p2);

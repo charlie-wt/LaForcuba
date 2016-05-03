@@ -1,21 +1,22 @@
-#include "cube_prog.h"
+#include "laforcuba.h"
 #include "lcd.h"
 #include "ili934x.h"
 #include "point.h"
 #include <math.h>
 #include <avr/interrupt.h>
+#include <util/delay.h>
 #include <stdlib.h>
 
 uint16_t t;
 int16_t lcdw, lcdh;
-point p = {-50, -50, -50, WHITE};
-point q = {-50, 50, -50, WHITE};
-point r = {50, 50, -50, WHITE};
-point s = {50, -50, -50, WHITE};
-point a = {-50, -50, 50, WHITE};
-point b = {-50, 50, 50, WHITE};
-point c = {50, 50, 50, WHITE};
-point d = {50, -50, 50, WHITE};
+point p = {-50, -50, -50, -50, -50, -50, WHITE};
+point q = {-50, 50, -50, -50, 50, -50, WHITE};
+point r = {50, 50, -50, 50, 50, -50, WHITE};
+point s = {50, -50, -50, 50, -50, -50, WHITE};
+point a = {-50, -50, 50, -50, -50, 50, WHITE};
+point b = {-50, 50, 50, -50, 50, 50, WHITE};
+point c = {50, 50, 50, 50, 50, 50, WHITE};
+point d = {50, -50, 50, 50, -50, 50, WHITE};
 
 void main(void) {
 	/* 8MHz clock, no prescaling. */
@@ -24,42 +25,26 @@ void main(void) {
 
 	/* Initialise the LCD display driver */
 	init_lcd();
-	set_frame_rate_hz(31);
+	set_frame_rate_hz(61);
 
 	/* So the compiler doesn't worry about unsigned/signed integer comparisons (can have negative coords). */
 	lcdw = (int16_t) display.width;
 	lcdh = (int16_t) display.height;
 
 	/* Enable external interrupts, for when pin 6 is changed (in accordance w/ framerate). For non-flickering display. */
-/*	EIMSK |= _BV(INT6);*/
+	EIMSK |= _BV(INT6);
 
 	/* Start time. */
 	t = 0;
 
 	/* Start loop, with interrupts to update time & animation. */
 	sei();
-	while(1){redraw();}
+	while(1){}
 	cli();
 }
 
 void redraw(){
-	if(t<display.width){
-/* TODO: Make version with pixel buffer or something. */
-		/* Clearing. */
-/*		clear_pt2D(&p);
-		clear_pt2D(&q);
-		clear_pt2D(&r);
-		clear_pt2D(&s);
-		clear_pt2D(&a);
-		clear_pt2D(&b);
-		clear_pt2D(&c);
-		clear_pt2D(&d);*/
-/*		clear_line2D(&p, &q);
-		clear_line2D(&q, &r);
-		clear_line2D(&r, &s);
-		clear_line2D(&s, &p);*/
-		clear_screen();
-
+	if(t<65535){
 		/* Transforming. */
 		rotX(&p, 1);
 		rotX(&q, 1);
@@ -87,6 +72,28 @@ void redraw(){
 		rotZ(&b, 1);
 		rotZ(&c, 1);
 		rotZ(&d, 1);
+
+		/* Clearing. */
+/*		clear_pt2D_p(&p);
+		clear_pt2D_p(&q);
+		clear_pt2D_p(&r);
+		clear_pt2D_p(&s);
+		clear_pt2D_p(&a);
+		clear_pt2D_p(&b);
+		clear_pt2D_p(&c);
+		clear_pt2D_p(&d);*/
+		clear_line2D_p(&p, &q);
+		clear_line2D_p(&q, &r);
+		clear_line2D_p(&r, &s);
+		clear_line2D_p(&s, &p);
+		clear_line2D_p(&a, &b);
+		clear_line2D_p(&b, &c);
+		clear_line2D_p(&c, &d);
+		clear_line2D_p(&d, &a);
+		clear_line2D_p(&a, &p);
+		clear_line2D_p(&b, &q);
+		clear_line2D_p(&c, &r);
+		clear_line2D_p(&d, &s);
 
 		/* Redrawing. */
 /*		draw_pt2D(&p);
