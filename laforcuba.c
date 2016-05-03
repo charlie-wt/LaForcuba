@@ -2,6 +2,7 @@
 #include "lcd.h"
 #include "ili934x.h"
 #include "point.h"
+#include "line.h"
 #include <math.h>
 #include <avr/interrupt.h>
 #include <stdlib.h>
@@ -16,6 +17,19 @@ point a = {-50, -50, 50, -50, -50, 50, WHITE};
 point b = {-50, 50, 50, -50, 50, 50, WHITE};
 point c = {50, 50, 50, 50, 50, 50, WHITE};
 point d = {50, -50, 50, 50, -50, 50, WHITE};
+
+line l1 = {&p, &q};
+line l2 = {&q, &r};
+line l3 = {&r, &s};
+line l4 = {&a, &b};
+line l5 = {&b, &c};
+line l6 = {&c, &d};
+line l7 = {&s, &p};
+line l8 = {&d, &a};
+line l9 = {&p, &a};
+line l10 = {&q, &b};
+line l11 = {&r, &c};
+line l12 = {&s, &d};
 
 void main(void) {
 	/* 8MHz clock, no prescaling. */
@@ -73,32 +87,11 @@ void redraw(){
 		rotZ(&d, 1);
 
 		/* Clearing. */
-		clear_line2D_p(&p, &q);
-		clear_line2D_p(&q, &r);
-		clear_line2D_p(&r, &s);
-		clear_line2D_p(&s, &p);
-		clear_line2D_p(&a, &b);
-		clear_line2D_p(&b, &c);
-		clear_line2D_p(&c, &d);
-		clear_line2D_p(&d, &a);
-		clear_line2D_p(&a, &p);
-		clear_line2D_p(&b, &q);
-		clear_line2D_p(&c, &r);
-		clear_line2D_p(&d, &s);
+/*		clear_shape_p(12, l1, l2, l3, l4, l5, l6, l7, l8, l9, l10, l11, l12);*/
 
 		/* Redrawing. */
-		draw_line2D(&p, &q);
-		draw_line2D(&q, &r);
-		draw_line2D(&r, &s);
-		draw_line2D(&s, &p);
-		draw_line2D(&b, &c);
-		draw_line2D(&c, &d);
-		draw_line2D(&d, &a);
-		draw_line2D(&a, &b);
-		draw_line2D(&a, &p);
-		draw_line2D(&b, &q);
-		draw_line2D(&c, &r);
-		draw_line2D(&d, &s);
+/*		draw_shape(12, l1, l2, l3, l4, l5, l6, l7, l8, l9, l10, l11, l12);*/
+		refresh_shape(12, &l1, &l2, &l3, &l4, &l5, &l6, &l7, &l8, &l9, &l10, &l11, &l12);
 	}else{t = 0;}
 }
 

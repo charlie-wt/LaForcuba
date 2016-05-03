@@ -70,18 +70,23 @@ struct point project(struct point *p, uint16_t fov, uint16_t viewer_dist){
 	return proj;
 }
 
-void draw_pt2D(struct point *p){
+void draw_pt(struct point *p){
 	draw_px((int16_t) p->x, (int16_t) p->y, p->col);
 	p->xp = p->x;
 	p->yp = p->y;
 	p->zp = p->z;
 }
 
-void clear_pt2D(struct point *p){
+void clear_pt(struct point *p){
 	draw_px((int16_t) p->x, (int16_t) p->y, display.background);
 }
 
-void draw_line2D(struct point *p1, struct point *p2){
+void refresh_pt(struct point *p){
+	clear_pt(p);
+	draw_pt(p);
+}
+
+void draw_line_pt(struct point *p1, struct point *p2){
 	draw_line(p1->x, p2->x, p1->y, p2->y, p1->col);
 	p1->xp = p1->x;
 	p1->yp = p1->y;
@@ -91,14 +96,14 @@ void draw_line2D(struct point *p1, struct point *p2){
 	p2->zp = p2->z;
 }
 
-void clear_line2D(struct point *p1, struct point *p2){
+void clear_line_pt(struct point *p1, struct point *p2){
 	draw_line(p1->x, p2->x, p1->y, p2->y, display.background);
 }
 
-void clear_pt2D_p(struct point *p){
+void clear_pt_p(struct point *p){
 	draw_px(p->xp, p->yp, display.background);
 }
 
-void clear_line2D_p(struct point *p1, struct point *p2){
+void clear_line_pt_p(struct point *p1, struct point *p2){
 	draw_line(p1->xp, p2->xp, p1->yp, p2->yp, display.background);
 }
