@@ -4,18 +4,6 @@
 #include "lcd.h"
 #include <stdarg.h>
 
-void rotX_l(struct point *p, int16_t angle){
-
-}
-
-void rotY_l(struct point *p, int16_t angle){
-
-}
-
-void rotZ_l(struct point *p, int16_t angle){
-	
-}
-
 void draw_line_l(struct line *l){
 	draw_line(l->p1->x, l->p2->x, l->p1->y, l->p2->y, l->p1->col);
 	l->p1->xp = l->p1->x;

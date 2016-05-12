@@ -7,7 +7,7 @@
 #include <avr/interrupt.h>
 #include <stdlib.h>
 
-uint16_t t;
+volatile uint16_t t;
 int16_t lcdw, lcdh;
 point p = {-50, -50, -50, -50, -50, -50, WHITE};
 point q = {-50, 50, -50, -50, 50, -50, WHITE};
