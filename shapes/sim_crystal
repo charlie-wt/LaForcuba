@@ -5,6 +5,19 @@ point d = {50, 0, -50,    50, 0, -50,    LIME_GREEN};
 point e = {0, 100, 0,    0, 100, 0,    LIME_GREEN};
 point f = {0, -100, 0,    0, -100, 0,    LIME_GREEN};
 
+line l1 = {&a, &b};
+line l2 = {&b, &c};
+line l3 = {&c, &d};
+line l4 = {&d, &a};
+line l5 = {&a, &e};
+line l6 = {&b, &e};
+line l7 = {&c, &e};
+line l8 = {&d, &e};
+line l9 = {&a, &f};
+line l10 = {&b, &f};
+line l11 = {&c, &f};
+line l12 = {&d, &f};
+
 redraw(){
 		rotY(&a, 1);
 		rotY(&b, 1);
@@ -20,29 +33,5 @@ redraw(){
 		transY(&e, sin(t/5));
 		transY(&f, sin(t/5));
 
-		clear_line2D_p(&a, &b);
-		clear_line2D_p(&b, &c);
-		clear_line2D_p(&c, &d);
-		clear_line2D_p(&d, &a);
-		clear_line2D_p(&a, &e);
-		clear_line2D_p(&b, &e);
-		clear_line2D_p(&c, &e);
-		clear_line2D_p(&d, &e);
-		clear_line2D_p(&a, &f);
-		clear_line2D_p(&b, &f);
-		clear_line2D_p(&c, &f);
-		clear_line2D_p(&d, &f);
-
-		draw_line2D(&b, &c);
-		draw_line2D(&c, &d);
-		draw_line2D(&d, &a);
-		draw_line2D(&a, &b);
-		draw_line2D(&a, &e);
-		draw_line2D(&b, &e);
-		draw_line2D(&c, &e);
-		draw_line2D(&d, &e);
-		draw_line2D(&a, &f);
-		draw_line2D(&b, &f);
-		draw_line2D(&c, &f);
-		draw_line2D(&d, &f);
+		refresh_shape(12, &l1, &l2, &l3, &l4, &l5, &l6, &l7, &l8, &l9, &l10, &l11, &l12);
 }
